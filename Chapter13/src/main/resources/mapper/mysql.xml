@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.course">
+    <resultMap id="UserMap" type="com.course.model.User">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="password" column="password"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+
+    <!--登录接口-->
+    <select id="login" parameterType="com.course.model.User" resultType="Integer">
+        select count(*) from user
+        where user_name=#{userName}
+        and password=#{password}
+    </select>
+
+    <!--添加用户接口-->
+    <insert id="addUser" parameterType="com.course.model.User">
+        insert into user(user_name,age,sex,password)
+        values(#{userName},#{age},#{sex},#{password})
+    </insert>
+
+    <!--获取用户接口-->
+    <select id="getUserInfo" parameterType="com.course.model.User" resultMap="UserMap">
+        select * from user
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="userId != null and userId != ''">
+                AND user_id=#{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND user_name=#{userName}
+            </if>
+            <if test="age != null and age != ''">
+                AND age=#{age}
+            </if>
+            <if test="sex != null and sex != ''">
+                AND sex=#{sex}
+            </if>
+        </trim>
+        ;
+    </select>
+
+    <!--更新/删除用户接口-->
+    <update id="updateUserInfo" parameterType="com.course.model.User">
+        update user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null and userName != ''">
+                user_name=#{userName},
+            </if>
+            <if test="age != null and age != ''">
+                age=#{age},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex=#{sex},
+            </if>
+            <if test="password != null and password != ''">
+                password=#{password},
+            </if>
+            <if test="deleted != null and deleted != ''">
+                deleted=#{deleted},
+            </if>
+        </trim>
+        where user_id=#{userId}
+    </update>
+</mapper>

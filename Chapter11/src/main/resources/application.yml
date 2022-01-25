@@ -1,0 +1,21 @@
+server:
+  port: 8888
+
+logging:
+  path: logs
+  file: mylog.log
+
+spring:
+  application:
+    name: myTest
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://116.62.113.68:3306/xunsihe_cloud
+    username: root
+    password: xsh@2021
+
+mybatis:
+  type-aliases-package: com.course.model
+  mapper-locations:
+    - mapper/*
+

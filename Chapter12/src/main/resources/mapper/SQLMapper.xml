@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.course.model">
+    <resultMap id="LoginCaseMap" type="com.course.model.LoginCase">
+        <id property="caseId" column="case_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
+        <result property="expected" column="expected"/>
+    </resultMap>
+    <resultMap id="AddUserCaseMap" type="com.course.model.AddUserCase">
+        <id property="caseId" column="case_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="password" column="password"/>
+        <result property="expected" column="expected"/>
+    </resultMap>
+    <resultMap id="GetUserInfoCaseMap" type="com.course.model.GetUserInfoCase">
+        <id property="caseId" column="case_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="expected" column="expected"/>
+    </resultMap>
+    <resultMap id="GetUserListCaseMap" type="com.course.model.GetUserListCase">
+        <id property="caseId" column="case_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="expected" column="expected"/>
+    </resultMap>
+    <resultMap id="UpdateUserInfoCaseMap" type="com.course.model.UpdateUserInfoCase">
+        <id property="caseId" column="case_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="password" column="password"/>
+        <result property="deleted" column="deleted"/>
+        <result property="expected" column="expected"/>
+    </resultMap>
+    <resultMap id="UserMap" type="com.course.model.User">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="password" column="password"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+
+    <!--获取登录接口case-->
+    <select id="loginCase" parameterType="Integer" resultMap="LoginCaseMap">
+        select * from login_case where case_id=#{caseId}
+    </select>
+
+    <!--添加用户接口case-->
+    <select id="addUserCase" parameterType="Integer" resultMap="AddUserCaseMap">
+        select * from add_user_case where case_id=#{caseId}
+    </select>
+
+    <!--获取用户信息case-->
+    <select id="getUserInfoCase" parameterType="Integer" resultMap="GetUserInfoCaseMap">
+        select * from get_user_info_case where case_id=#{caseId}
+    </select>
+
+    <!--获取用户列表case-->
+    <select id="getUserListCase" parameterType="Integer" resultMap="GetUserListCaseMap">
+        select * from get_user_list_case where case_id=#{caseId}
+    </select>
+
+    <!--更新/删除用户case-->
+    <select id="updateUserInfoCase" parameterType="Integer" resultMap="UpdateUserInfoCaseMap">
+        select * from update_user_info_case where case_id=#{caseId}
+    </select>
+
+    <select id="addUser" parameterType="com.course.model.AddUserCase" resultMap="UserMap">
+        select * from user
+        where user_name=#{userName} and age=#{age} and sex=#{sex} and password=#{password}
+    </select>
+
+    <!--获取用户信息-->
+    <select id="getUserInfo" parameterType="com.course.model.GetUserInfoCase" resultMap="UserMap">
+        select * from user where user_id=#{userId}
+    </select>
+
+    <!--获取用户列表-->
+    <select id="getUserList" parameterType="com.course.model.GetUserListCase" resultMap="UserMap">
+        select * from user
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="userName != null and userName != ''">
+                AND user_name=#{userName}
+            </if>
+            <if test="age != null and age != ''">
+                AND age=#{age}
+            </if>
+            <if test="sex != null and sex != ''">
+                AND sex=#{sex}
+            </if>
+        </trim>
+        ;
+    </select>
+
+    <!--获取更新之后的数据-->
+    <select id="getUpdateUserInfo" parameterType="com.course.model.UpdateUserInfoCase" resultMap="UserMap">
+        select * from user
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="userName != null and userName != ''">
+                AND user_name=#{userName}
+            </if>
+            <if test="age != null and age != ''">
+                AND age=#{age}
+            </if>
+            <if test="sex != null and sex != ''">
+                AND sex=#{sex}
+            </if>
+            <if test="password != null and password != ''">
+                AND password=#{password}
+            </if>
+            <if test="deleted != null and deleted != ''">
+                AND deleted=#{deleted}
+            </if>
+        </trim>
+        And user_id=#{userId}
+    </select>
+</mapper>
